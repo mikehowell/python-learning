@@ -125,21 +125,29 @@ def choose_first():
         return "Player 1"
 
 
-def player_choice(board):
+def player_choice(board, player):
 
     position = 0
+    available = False
 
-    while position not in [1, 2, 3, 4, 5, 6, 7, 8, 9] or not space_check(
-        board, position
-    ):
-        position = int(input("Choose your next position: (1-9) "))
-
+    while position not in [1, 2, 3, 4, 5, 6, 7, 8, 9] or not space_check(board, position):
+        while not available:
+            position = int(input(f"{player}, make your next move: (1-9) "))
+            if position_available(position):
+                print(f"position: {position} is already taken, please choose again!")
+            else:
+                available = True
+            
     return position
+
+
+def position_available(position):
+    return not current_board[position].isdigit()
 
 
 def replay():
 
-    return input("Do you want to play again? Enter Yes or No: ").lower().startswith("y")
+    return input("Do you want to play? Enter Yes or No: ").lower().startswith("y")
 
 
 def space_check(board, position):
@@ -155,9 +163,7 @@ def full_board_check(board):
 
     return True
 
-
-##################################
-
+#Set Up Game Play!
 print("Welcome to Tic Tac Toe!")
 
 while replay():
@@ -173,8 +179,7 @@ while replay():
     while not (full_board_check(current_board)):
 
         if player_turn == "Player 1":
-            # how to check if position is in use!!
-            current_board[(player_choice(current_board))] = Player_1
+            current_board[(player_choice(current_board, player_turn))] = Player_1
             display_board(current_board)
             # need to test if move resulted in win or draw
             if win_check(current_board, Player_1):
@@ -187,7 +192,7 @@ while replay():
                 player_turn = "Player 2"
 
         if player_turn == "Player 2":
-            current_board[(player_choice(current_board))] = Player_2
+            current_board[(player_choice(current_board, player_turn))] = Player_2
             display_board(current_board)
             if win_check(current_board, Player_2):
                 print(f"{player_turn} wins")
@@ -198,12 +203,7 @@ while replay():
             else:
                 player_turn = "Player 1"
 
-    # while game_on:
-    # Player 1 Turn
 
-    # Player2's turn.
-
-    # pass
 
     if not replay():
         break
