@@ -130,14 +130,21 @@ def player_choice(board, player):
     position = 0
     available = False
 
-    while position not in [1, 2, 3, 4, 5, 6, 7, 8, 9] or not space_check(board, position):
+    while position not in [1, 2, 3, 4, 5, 6, 7, 8, 9] or not space_check(
+        board, position
+    ):
         while not available:
-            position = int(input(f"{player}, make your next move: (1-9) "))
-            if position_available(position):
-                print(f"position: {position} is already taken, please choose again!")
-            else:
-                available = True
-            
+            try:
+                position = int(input(f"{player}, make your next move: (1-9) "))
+                if position_available(position):
+                    print(
+                        f"position: {position} is already taken, please choose again!"
+                    )
+                else:
+                    available = True
+            except (ValueError, IndexError):
+                print(f"Invalid choice!\n{player}, please choose again.")
+
     return position
 
 
@@ -151,7 +158,7 @@ def replay():
 
 
 def space_check(board, position):
-    return board[position] != "X" or board[position] != "O"
+    return not (board[position] == "X" or board[position] == "O")
     # return board[position] == " "
 
 
@@ -163,7 +170,8 @@ def full_board_check(board):
 
     return True
 
-#Set Up Game Play!
+
+# Set Up Game Play!
 print("Welcome to Tic Tac Toe!")
 
 while replay():
@@ -203,13 +211,13 @@ while replay():
             else:
                 player_turn = "Player 1"
 
-
-
     if not replay():
         break
 
-# if __name__ == "__main__":
-#     print(__name__)
-#     start_board = ['#', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-#     display_board(start_board)
+if __name__ == "__main__":
+    replay()
+
+    # print(__name__)
+    # start_board = ['#', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    # display_board(start_board)
 
